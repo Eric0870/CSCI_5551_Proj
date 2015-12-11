@@ -1,0 +1,97 @@
+# ********************************************************************************************** 
+# name: Follow_Me  
+# description: main routine for Follow Me application
+#
+# params: none 
+# input: 
+# output: 
+#
+# algorithm:
+#   - main tracking loop 
+#       -- update_state()
+#       -- track_object()
+#       -- move_drone()
+#       -- sleep()
+#
+# notes: 
+# ********************************************************************************************** 
+- application initialization
+- main tracking loop, while ( drone flying && no errors in application )
+    -- update_state() 
+    -- track_object()
+    -- move_drone()
+    -- sleep for arbitrary amount of time between tracking loops (start with 1 second updates)
+
+
+# ********************************************************************************************** 
+# name: update_state 
+# description: maintain mission state machine
+#
+# params: none 
+# input:  
+# output: mission state 
+#
+# algorithm:
+#   - manage mission state transitions IAW Mission State Machine design 
+#
+# notes: 
+# **********************************************************************************************
+- init state to 0
+
+switch ( state )
+    case 0
+        
+    
+    case 1
+    
+    
+    case 2
+    
+    
+
+# ********************************************************************************************** 
+# name: track_object 
+# description: tracker routine that determines where to move the drone 
+#              in order to position the target in the center of view 
+#
+# params: mov_cmd_vect_ptr
+# input:  target info from video stream 
+# output: move command vector
+#
+# algorithm:
+#   - parse rostopic navdata for tag info
+#   - compute movement command from target location in field of view
+#
+# notes: 
+# ********************************************************************************************** 
+- initialization
+- parse rostopic /ardrone/navdata for tag info:
+    -- tags_type?
+    -- tags_xc (x location of the tag within the image)
+    -- tags_yc (y location of the tag within the image)
+    -- tags_width 
+    -- tags_height
+    -- tags_orientation
+    -- tags_distance
+- compute movement command 
+
+
+# ********************************************************************************************** 
+# name: move_drone
+# description: a mover routine to generate the motion command that will be sent to the drone
+#
+# params: mov_cmd_vect_ptr
+# input:  move command 
+# output: AT commands sent to drone
+#
+# algorithm:
+#   - compute and send AT command to drone using ROS API
+# 
+# notes: 
+# ********************************************************************************************** 
+- initialization 
+- generate AT command from move command
+- call ROS routine to send AT command 
+
+
+
