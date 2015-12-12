@@ -1,0 +1,160 @@
+# Functions for ardrone_followme ROS package
+
+# ********************************************************************************************** 
+# name: Follow_Me_Main
+# description: main routine for Follow Me application
+#
+# params: none 
+# input: 
+# output: 
+#
+# algorithm:
+#   - main tracking loop
+#       -- proc_video() 
+#       -- updt_state()
+#       -- trak_object()
+#       -- move_drone()
+#       -- publ_stats()
+#       -- sleep()
+#
+# notes: 
+# ********************************************************************************************** 
+- application initialization
+    -- start GUI for drone control
+        --- so user can command take-off, land, toggle emergency, etc
+        --- will need to manage communication to avoid conflicts between GUI cmds and move_drone() cmds
+- main tracking loop, while ( drone flying && no errors in application )
+    -- proc_video() 
+    -- updt_state() 
+    -- trak_object()
+    -- move_drone()
+        --- down sample drone commands to configurable rate (so only call move_drone() at timer expiration)
+        --- SDK ref manual recommends sending AT cmds 30ms apart for smooth flight
+            ---- will need to play w interval to find optimal setting
+            ---- run a few tests: 30hz(33.3ms), 15hz(66.7ms), 10hz(100ms), 5hz(200ms), 2hz(500ms), 1hz(1s)
+        --- SDK ref manual: drone thinks connection lost if cmd not received in 2 second period
+            ---- send 'do nothing' command in move_drone() when not tracking just to maintain connection 
+    -- publ_stats()
+    -- sleep()
+
+            
+# ********************************************************************************************** 
+# name: proc_video 
+# description: display and record video stream received from drone 
+#
+# params: record_on
+# input:  video stream from drone 
+# output: video streamed to monitor and written to hard drive
+#
+# algorithm:
+#   - process video stream received from drone
+#   - send video stream to monitor for real time display
+#   - write video stream to file 
+#
+# notes: 
+# **********************************************************************************************
+- initialization
+    -- create file to write video data to 
+        --- name by date/time
+        --- if easy to do, write to user defined folder path
+- process video stream received from drone
+- send video stream to monitor for real time display
+- write video stream to file  
+
+
+# ********************************************************************************************** 
+# name: updt_state 
+# description: maintain mission state machine
+#
+# params: none 
+# input:  
+# output: mission state 
+#
+# algorithm:
+#   - manage mission state transitions IAW Mission State Machine design 
+#
+# notes: 
+# **********************************************************************************************
+- init state to 0
+
+switch ( state )
+    case 0
+        
+    
+    case 1
+    
+    
+    case 2
+    
+    
+# ********************************************************************************************** 
+# name: trak_object 
+# description: tracker routine that determines where to move the drone 
+#              in order to position the target in the center of view 
+#
+# params: mov_cmd_vect_ptr
+# input:  target info from drone (initially from navdata, eventually from vid stream)
+# output: move command vector
+#
+# algorithm:
+#   - parse rostopic navdata for tag info
+#   - compute movement command from target location in field of view
+#
+# notes: 
+# ********************************************************************************************** 
+- initialization
+- parse rostopic /ardrone/navdata for tag info:
+    -- tags_type?
+    -- tags_xc (x location of the tag within the image)
+    -- tags_yc (y location of the tag within the image)
+    -- tags_width 
+    -- tags_height
+    -- tags_orientation
+    -- tags_distance
+- compute movement command 
+
+
+# ********************************************************************************************** 
+# name: move_drone
+# description: a mover routine to generate the motion command that will be sent to the drone
+#
+# params: mov_cmd_vect_ptr
+# input:  move command 
+# output: AT commands sent to drone
+#
+# algorithm:
+#   - compute and send AT command to drone using ROS API
+# 
+# notes: 
+# ********************************************************************************************** 
+- initialization 
+- generate AT command from move command
+- call ROS routine to send AT command 
+
+
+# ********************************************************************************************** 
+# name: publ_stats
+# description: background thread to publish statistics
+#
+# params: 
+# input:  
+# output: 
+#
+# algorithm:
+#   - process required metrics from drone and client application 
+#   - publish statistics to command shell
+#   - write statistics to client execution log 
+# 
+# notes: 
+# ********************************************************************************************** 
+- initialization
+    -- create client execution log file 
+        --- name by date/time
+        --- if easy to do, write to user defined folder path
+    -- set rates for statistics display and logging 
+- process required metrics from drone and client application 
+- publish statistics to command shell for real time display
+    -- done at user defined rate 
+- write statistics to client execution log at 
+    -- done at user defined rate 
+
