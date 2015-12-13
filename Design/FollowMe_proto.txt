@@ -20,7 +20,7 @@
 # notes: 
 # ********************************************************************************************** 
 - application initialization
-    -- start GUI for drone control
+    -- start GUI for drone control? >> for now just use keyboard_controller
         --- so user can command take-off, land, toggle emergency, etc
         --- will need to manage communication to avoid conflicts between GUI cmds and move_drone() cmds
 - main tracking loop, while ( drone flying && no errors in application )
