@@ -20,23 +20,33 @@
 # notes: 
 # ********************************************************************************************** 
 - application initialization
-    -- start GUI for drone control? >> for now just use keyboard_controller
-        --- so user can command take-off, land, toggle emergency, etc
-        --- will need to manage communication to avoid conflicts between GUI cmds and move_drone() cmds
+  -- start GUI for drone control
+     --- allow user to command take-off, land, toggle emergency, etc
+     --- will need to manage communication to avoid conflicts between GUI cmds and move_drone() cmds
 - main tracking loop, while ( drone flying && no errors in application )
-    -- proc_video() 
-    -- updt_state() 
-    -- trak_object()
-    -- move_drone()
-        --- down sample drone commands to configurable rate (so only call move_drone() at timer expiration)
-        --- SDK ref manual recommends sending AT cmds 30ms apart for smooth flight
-            ---- will need to play w interval to find optimal setting
-            ---- run a few tests: 30hz(33.3ms), 15hz(66.7ms), 10hz(100ms), 5hz(200ms), 2hz(500ms), 1hz(1s)
-        --- SDK ref manual: drone thinks connection lost if cmd not received in 2 second period
-            ---- send 'do nothing' command in move_drone() when not tracking just to maintain connection 
-    -- publ_stats()
-    -- sleep()
-
+  -- proc_video()
+     --- process video stream received from drone
+     --- send video stream to monitor for real time display
+     --- write video stream to file 
+  -- updt_state()
+     --- switch case to manage mission state transitions 
+  -- trak_object()
+     --- parse rostopic /ardrone/navdata for tag statistics
+         ---- tags_xc (x location of the tag within the image)
+         ---- tags_yc (y location of the tag within the image)
+         ---- tags_distance
+     --- compute movement command needed to locate object in center of view
+  -- move_drone()
+     --- down sample drone commands to configurable rate (only call move_drone() at timer expiration)
+     --- SDK ref manual recommends sending AT cmds 30ms apart for smooth flight
+     --- SDK ref manual: drone assumes connection lost if cmd not received for 2 seconds
+         ---- send 'do nothing' command in move_drone() when not tracking just to maintain connection 
+  -- publ_stats()
+     --- process required metrics from drone and client application 
+     --- publish statistics to command shell for real time display
+     --- write statistics to client execution log
+  -- sleep()
+     --- if needed 
             
 # ********************************************************************************************** 
 # name: proc_video 
@@ -55,8 +65,6 @@
 # **********************************************************************************************
 - initialization
     -- create file to write video data to 
-        --- name by date/time
-        --- if easy to do, write to user defined folder path
 - process video stream received from drone
 - send video stream to monitor for real time display
 - write video stream to file  
@@ -75,16 +83,8 @@
 #
 # notes: 
 # **********************************************************************************************
-- init state to 0
-
-switch ( state )
-    case 0
-        
-    
-    case 1
-    
-    
-    case 2
+- initialization
+- switch case to manage mission state transitions 
     
     
 # ********************************************************************************************** 

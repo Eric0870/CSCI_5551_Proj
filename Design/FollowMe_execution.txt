@@ -8,18 +8,14 @@
 
     
 # Terminal 2
-    # Run Follow Me application 
-    roscd ardrone_followme
-    python srs/followme.py 
-    
-    # for now, confirm this is running by viewing the average_pitch topic 
-    rostopic echo /ardrone/average_pitch
-    
+    # View Follow Me application debug output
+    rostopic echo /ardrone/follow_me
+        
     
 # Terminal 3
-    # Begin recording navdata and cmd_vel topics to rosbag
+    # Begin recording video steam, navdata and cmd_vel topics to rosbag
     # can playback recording for development and validation
-    rosbag record -O data_$(date +%Y_%m_%d_%H_%M_%S).bag /ardrone/navdata /cmd_vel
+    rosbag record -O flight_$(date +%Y_%m_%d_%H_%M_%S).bag /ardrone/image_raw /ardrone/navdata /cmd_vel
 
 
 # AR.Drone Video Feed 
@@ -29,12 +25,34 @@
     
     
 # Terminal 3    
-    # Ctrl+C to stop recording 
-    
-    
+    # Ctrl+C to stop recording   
 
 
 # playback rosbag
-roscore
-rosbag play <name>.bag
+    # play video of raw image 
+        # Terminal 1
+        roscore
+        # Terminal 2
+        rosrun image_view image_view image:=/ardrone/image_raw
+        # Terminal 3
+        rosbag play <name>.bag
 
+    # plot navdata 
+        # Terminal 1
+        roscore
+        # Terminal 2
+        rqt_plot /ardrone/navdata/ax:ay:az or
+        rqt_plot /ardrone/navdata/tags_count
+        # Terminal 3
+        rosbag play <name>.bag
+        
+    # plot cmd_vel  
+        # Terminal 1
+        roscore
+        # Terminal 2
+        rqt_plot /cmd_vel/linear/y:x
+        # Terminal 3
+        rosbag play <name>.bag
+        
+        
+        
